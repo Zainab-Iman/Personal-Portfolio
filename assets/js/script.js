@@ -49,71 +49,80 @@ for (let i = 0; i < testimonialsItem.length; i++) {
 
 }
 
-// add click event to modal close button
+// Add click event to modal close button
 modalCloseBtn.addEventListener("click", testimonialsModalFunc);
 overlay.addEventListener("click", testimonialsModalFunc);
 
-
-
-// custom select variables
+// Custom select variables
 const select = document.querySelector("[data-select]");
 const selectItems = document.querySelectorAll("[data-select-item]");
 const selectValue = document.querySelector("[data-selecct-value]");
 const filterBtn = document.querySelectorAll("[data-filter-btn]");
 
-select.addEventListener("click", function () { elementToggleFunc(this); });
+// Toggle the dropdown
+select.addEventListener("click", function () {
+  elementToggleFunc(this);
+});
 
-// add event in all select items
-for (let i = 0; i < selectItems.length; i++) {
-  selectItems[i].addEventListener("click", function () {
-
-    let selectedValue = this.innerText.toLowerCase();
+// Add event in all select items
+selectItems.forEach(function (item) {
+  item.addEventListener("click", function () {
+    const selectedValue = this.innerText.toLowerCase();
     selectValue.innerText = this.innerText;
     elementToggleFunc(select);
     filterFunc(selectedValue);
-
   });
-}
+});
 
-// filter variables
+// Select all filter buttons and project items
 const filterItems = document.querySelectorAll("[data-filter-item]");
 
+// Function to handle the filtering logic
 const filterFunc = function (selectedValue) {
+  selectedValue = selectedValue.toLowerCase(); // Case-insensitive comparison
 
-  for (let i = 0; i < filterItems.length; i++) {
+  filterItems.forEach(function (item) {
+    const itemCategory = item.dataset.category.toLowerCase();
 
-    if (selectedValue === "all") {
-      filterItems[i].classList.add("active");
-    } else if (selectedValue === filterItems[i].dataset.category) {
-      filterItems[i].classList.add("active");
+    // Fix for case sensitivity
+    if (selectedValue === "graphic design" || selectedValue === "graphic designer") {
+      item.classList.add("active"); // Show all items when "Graphic Design" or "Graphic Designer" is selected
+    } else if (selectedValue === itemCategory) {
+      item.classList.add("active"); // Show items that match the selected category
     } else {
-      filterItems[i].classList.remove("active");
+      item.classList.remove("active"); // Hide items that don't match the category
     }
+  });
+};
 
-  }
+// Add event listeners to filter buttons
+filterBtn.forEach(function (button) {
+  button.addEventListener("click", function () {
+    const selectedValue = this.innerText.toLowerCase(); // Get the button text
+    filterFunc(selectedValue); // Filter items based on the selected category
 
-}
+    // Toggle the active class for the filter buttons
+    filterBtn.forEach(function (btn) {
+      btn.classList.remove("active");
+    });
+    this.classList.add("active");
+  });
+});
 
-// add event in all filter button items for large screen
-let lastClickedBtn = filterBtn[0];
+// Add event in all filter button items for large screen
+let lastClickedBtn = filterBtn[0]; // Default active button
 
-for (let i = 0; i < filterBtn.length; i++) {
-
-  filterBtn[i].addEventListener("click", function () {
-
-    let selectedValue = this.innerText.toLowerCase();
+filterBtn.forEach(function (button) {
+  button.addEventListener("click", function () {
+    const selectedValue = this.innerText.toLowerCase();
     selectValue.innerText = this.innerText;
     filterFunc(selectedValue);
 
     lastClickedBtn.classList.remove("active");
     this.classList.add("active");
     lastClickedBtn = this;
-
   });
-
-}
-
-
+});
 
 // contact form variables
 const form = document.querySelector("[data-form]");
