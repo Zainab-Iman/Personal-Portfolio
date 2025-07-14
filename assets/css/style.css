@@ -225,6 +225,12 @@ main.drake-main {
     position: fixed; */
     /* overflow: hidden; */
 }
+@media (max-width: 767px) {
+  .drake-main {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
 
 .page-section {
     overflow: hidden;
